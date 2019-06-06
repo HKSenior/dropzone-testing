@@ -1,0 +1,95 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Dropzone JS</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
+    </head>
+    <body>
+        <div class="container" style="margin-top: 20px;">
+            <p class="text-center">This is a dropzone box example</p>
+            <p class="text-center">Lets pretend the following list represents the employees, freelancers and vendors</p>
+            <ol>
+                <li>
+                    <p>Employees</p>
+                    <ul>
+                        <li>Jack</li>
+                        <li>John</li>
+                        <li>Peter</li>
+                    </ul>
+                </li>
+                <li>
+                    <p>Freelancers</p>
+                    <ul>
+                        <li>Tatyana</li>
+                        <li>Emily</li>
+                        <li>Joel</li>
+                    </ul>
+                </li>
+                <li>
+                    <p>Vendors</p>
+                    <ul>
+                        <li>Vendor #1</li>
+                        <li>Vendor #2</li>
+                        <li>Vendor #3</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <br><br>
+
+        <div class="container">
+            <form action="/upload" class="dropzone dz-clickable" id="dropzoneUpload">
+                <div class="dz-default dz-message">
+                    <span>Drop multiple files here to upload</span><br>
+                    <span>Try dropping in a duplicate file</span><br>
+                    <span>(Is that the desired affect?)</span>
+                </div>
+            </form>
+            <input type="file" multiple="multiple" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+        </div>
+
+        <div class="text-center hidden" id="cnt-preview-error" style="margin: 10px 30px;"></div>
+        <div class="container" id="preview" style="margin-bottom: 20px;"></div>
+        <button type="submit" class="btn btn-primary center-block" id="dz-submit-btn">Submit</button>
+        <br><br><br>
+        <div class="row hidden" id="cnt-preview-row" style="margin: 20px 0px;">
+            <div class="col-xs-5 text-center" id="cnt-preview-thumbnail"></div>
+            <div class="col-xs-7">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <select class="form-control preview-dropdown" name="account-link" onchange="changeDropdownSelected(this.id)">
+                            <option selected="selected" value="---------">---------</option>
+                            <optgroup label="Employees">
+                                <option value="Jack">Jack</option>
+                                <option value="John">John</option>
+                                <option value="Peter">Peter</option>
+                            </optgroup>
+                            <optgroup label="Freelancers">
+                                <option value="Tatyana">Tatyana</option>
+                                <option value="Emily">Emily</option>
+                                <option value="Joel">Joel</option>
+                            </optgroup>
+                            <optgroup label="Vendors">
+                                <option value="Vendor #1">Vendor #1</option>
+                                <option value="Vendor #2">Vendor #2</option>
+                                <option value="Vendor #3">Vendor #3</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-danger" id="ctn-preview-delete" style="margin-top: 3px;">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="/static/javascripts/dropzone.js"></script>
+        <script src="/static/javascripts/main.js"></script>
+    </body>
+</html>
