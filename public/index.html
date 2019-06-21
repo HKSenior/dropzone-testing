@@ -56,26 +56,31 @@
         <button type="submit" class="btn btn-primary center-block" id="dz-submit-btn">Submit</button>
         <br><br><br>
         <div class="row hidden" id="cnt-preview-row" style="margin: 20px 0px;">
-            <div class="col-xs-5 text-center" id="cnt-preview-thumbnail"></div>
+            <div class="col-xs-5">
+                <div class="row text-center">
+                    <div id="cnt-preview-thumbnail"></div>
+                    <p id="cnt-preview-file-name" style="margin-top: 10px;"></p>
+                </div>
+            </div>
             <div class="col-xs-7">
                 <div class="row">
                     <div class="col-xs-10">
-                        <select class="form-control preview-dropdown" name="account-link" onchange="changeDropdownSelected(this.id)">
+                        <select class="form-control preview-dropdown" name="account-link" oninput="onUserChange(event)">
                             <option selected="selected" value="---------">---------</option>
                             <optgroup label="Employees">
-                                <option value="Jack">Jack</option>
-                                <option value="John">John</option>
-                                <option value="Peter">Peter</option>
+                                <option value="452369_Employee">Jack</option>
+                                <option value="784962_Employee">John</option>
+                                <option value="710396_Employee">Peter</option>
                             </optgroup>
                             <optgroup label="Freelancers">
-                                <option value="Tatyana">Tatyana</option>
-                                <option value="Emily">Emily</option>
-                                <option value="Joel">Joel</option>
+                                <option value="968213_Freelancer">Tatyana</option>
+                                <option value="947826_Freelancer">Emily</option>
+                                <option value="973149_Freelancer">Joel</option>
                             </optgroup>
                             <optgroup label="Vendors">
-                                <option value="Vendor #1">Vendor #1</option>
-                                <option value="Vendor #2">Vendor #2</option>
-                                <option value="Vendor #3">Vendor #3</option>
+                                <option value="586137_Vendor">Vendor #1</option>
+                                <option value="783969_Vendor">Vendor #2</option>
+                                <option value="731696_Vendor">Vendor #3</option>
                             </optgroup>
                         </select>
                     </div>

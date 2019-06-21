@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Testing</title>
+    <style>
+        .inline {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <form id="main-form" action="/form" method="POST">
+        <p style="display: inline;">Have you recieved all the Invoices?</p>
+        <input type="hidden" id="aiclicked" name="10801_aiclicked" value="False">
+        <input class="autosave" id="myCheckbox" type="checkbox" name="10801_allinvoices" value="False">
+        <button id="submitButton" type="submit">Submit</button>
+    </form>
+
+    <select class="select2widget form-control">
+        <option selected></option>
+        <option value="1">Lamborghini Shipping</option>
+        <option value="2">Ferrari Shipping</option>
+        <option value="3">Bugatti Shipping</option>
+        <option value="4">Mclaren Shipping</option>
+    </select>
+
+    <br>
+    <br>
+    <br>
+
+    <div>
+        <button id="shipping_btn">Add another shipping location</button>
+    </div>
+
+    <div id="">
+        <select class="select2widget form-control inline">
+            <option selected></option>
+            <option value="1">Lamborghini Shipping</option>
+            <option value="2">Ferrari Shipping</option>
+            <option value="3">Bugatti Shipping</option>
+            <option value="4">Mclaren Shipping</option>
+        </select>
+        <select class="select2widget form-control inline">
+            <option selected></option>
+            <option value="1">Lamborghini Shipping</option>
+            <option value="2">Ferrari Shipping</option>
+            <option value="3">Bugatti Shipping</option>
+            <option value="4">Mclaren Shipping</option>
+        </select>
+        <input class="inline" type="text" id="the_input">
+    </div>
+
+    <script>
+        function onSelectChange(val) {
+            const dropdown = document.getElementsByClassName("select2widget form-control")[0];
+            const textInput = document.querySelector("#the_input");
+            const options = dropdown.childNodes;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value == val) {
+                    const portions = options[i].text.split(' ');
+                    if (portions.length >= 1) {
+                        textInput.value = portions[0];
+                    }
+                }
+            }
+        }
+
+        const dropdown = document.getElementsByClassName("select2widget form-control")[0];
+        dropdown.setAttribute("onChange", "onSelectChange(this.value)");
+
+        window.document.querySelector(".autosave").addEventListener('click', (e) => {
+            let cbox = window.document.querySelector("#myCheckbox");
+            let hinput = window.document.querySelector("#aiclicked");
+            if (!cbox.checked) {
+                cbox.removeAttribute("checked");
+                cbox.setAttribute("value", "False");
+                if (hinput.getAttribute("value") == "False") {
+                    hinput.setAttribute("value", "True");
+                } else {
+                    hinput.setAttribute("value", "False");
+                }
+                console.log("The checkbox was unchecked");
+            } else {
+                cbox.setAttribute("checked", '');
+                cbox.setAttribute("value", "True");
+                hinput.setAttribute("value", "True");
+                console.log("The checkbox was checked");
+            }
+            let formData = new FormData(document.querySelector("#main-form"));
+            // formData.append(cbox.getAttribute('name'), cbox.getAttribute('value'));
+            console.log(formData);
+            console.log(cbox.getAttribute('name'));
+            console.log(cbox.getAttribute('value'));
+        });
+    </script>
+</body>
+</html>
