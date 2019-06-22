@@ -1,77 +1,7 @@
-let fileNumber = 0;                     // The current file index
-let idFileNameDict = new Object();      // Relate file names to dropdown ids
-let filenameUserDict = new Object();
-
+let fileNumber = 0;
 let fileInfo = new Object();
 
-// When ever the user selects a new value in the dropdown
-// append the selected attribute to the corresponding element
-// to be sent to the server later on.
-function changeDropdownSelected(id) {
-    console.log(id);
-    let dropdown = document.querySelector("#" + id);
-    let value = document.querySelector("#" + id).value;
-    let selected = dropdown.querySelectorAll('[selected="selected"]');
-
-    // Remove selected attribute from all option elements that have it
-    selected.forEach((node) => {
-        node.removeAttribute("selected");
-    });
-
-    // Add selected attribute to newly selected option
-    dropdown.childNodes.forEach((groups) => {
-        groups.childNodes.forEach((option) => {
-            if (option.value === value) {
-                option.setAttribute("selected", "selected");
-            }
-        });
-    });
-}
-
-// When an error occurs call this function to show a message
-// in the error div container.
-function showErrorDiv(dz, file, message, removeFile=true) {
-    if (typeof showErrorDiv.mainDiv == 'undefined'
-        && typeof showErrorDiv.counter == 'undefined') {
-        showErrorDiv.mainDiv = document.querySelector("#cnt-preview-error");
-        showErrorDiv.counter = 0;
-    }
-
-    // Remove file from dropzone
-    if (removeFile) {
-        dz.removeFile(file);
-    }
-
-    // Remove hidden class from error container if there
-    showErrorDiv.mainDiv.classList.remove("hidden");
-
-    // Create text node, add the id, increment the counter and
-    // append the element to the error div
-    let textNode = document.createElement("p");
-    let id = "error_tnode_" + showErrorDiv.counter.toString();
-    showErrorDiv.counter++;
-    textNode.innerHTML = message;
-    textNode.setAttribute("id", id);
-    showErrorDiv.mainDiv.appendChild(textNode);
-
-    // Set the timer to remove the textnode
-    setTimeout(() => {
-        let children = showErrorDiv.mainDiv.children;
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].getAttribute("id") == id) {
-                showErrorDiv.mainDiv.removeChild(children[i]);
-            }
-        }
-
-        // If there are no more children in the error container hide the div
-        if (showErrorDiv.mainDiv.children.length === 0) {
-            showErrorDiv.mainDiv.classList.add("hidden");
-        }
-    }, 5000);
-}
-
 function onUserChange(event) {
-    console.log("Changed id - " + event.target.id);
     fileInfo[event.target.id]['data'] = event.target.value;
 }
 
@@ -108,22 +38,6 @@ window.Dropzone.options.dropzoneUpload = {
                     fileInfo[id] = obj;
                 }
 
-                // if (!(fileName in idFileNameDict)) {
-                //     idFileNameDict[fileName] = id;
-                // } else {
-                //     showErrorDiv(
-                //         this,
-                //         file,
-                //         "A duplicate of "
-                //         + fileName
-                //         + " was found and removed."
-                //     );
-                //     return;
-                // }
-                // Create default thumbnail
-                // window.Dropzone.prototype.defaultOptions['thumbnail'](file,
-                //     dataUrl);
-
                 let _this = this;
 
                 // Get thumbnail and clone it
@@ -157,11 +71,13 @@ window.Dropzone.options.dropzoneUpload = {
                 let errorBtn = row.querySelector("#ctn-preview-delete");
                 errorBtn.removeAttribute("id");
                 errorBtn.addEventListener("click", function(e) {
-                    console.log(e);
-                    console.log(e.view.key);
+                    let grandparent = this.parentElement.parentElement;
+                    let dropdown = grandparent.getElementsByClassName(
+                        "form-control preview-dropdown");
+                    let id = dropdown[0].getAttribute("id");
                     _this.removeFile(file);
                     row.parentNode.removeChild(row);
-                    // delete idFileNameDict[fileName];
+                    delete fileInfo[id];
                 });
 
                 // Add the row to the preview container
@@ -202,49 +118,33 @@ window.Dropzone.options.dropzoneUpload = {
                 }
             }
 
-            console.log("sending file - " + fileName);
+            // Attach the data to formData
             for (key in fileInfo) {
                 if (fileInfo[key]['fileName'] == fileName) {
-                    if (fileInfo[key]['data'] == null) {
-                        
+                    if (fileInfo[key]['data'] != null) {
+                        formData.append("user", fileInfo[key]["data"]);
                     }
                     console.log("sending file " + fileName + " - " + fileInfo[key]['data']);
                 }
             }
-
-            // Get the selected value from the dropdown in preview
-            // Use the file name as the index for the dictionary to get
-            // the id of the related option tags in the preview container
-            // let id = idFileNameDict[fileName];
-            // let options = document.querySelector("#" + id).children;
-            // let value = null;
-
-            // for (let i = 1; i < options.length; i++) {
-            //     let children = options[i].children;
-            //     for (let y = 0; y < children.length; y++) {
-            //         if (children[y].getAttribute("selected") === "selected") {
-            //             value = children[y].value;
-            //         }
-            //     }
-            // }
-
-            // if (value == null) {
-            //     showErrorDiv(
-            //         this,
-            //         file,
-            //         "Please select an option in the drop down menu for "
-            //         + fileName,
-            //         false
-            //     );
-            // }
         });
 
         // Submit files on button click
         let submitBtn = document.querySelector("#dz-submit-btn");
         let _this = this;
         submitBtn.addEventListener("click", function() {
-            // let myDropZone = window.Dropzone.forElement(".dropzone");
-            _this.processQueue();
+            // Check if a user has been selected for each upload
+            let send = true;
+            for (key in fileInfo) {
+                if (fileInfo[key]['data'] == null) {
+                    send = false;
+                    console.log("Please select a user for " + fileInfo[key]['fileName']);
+                }
+            }
+            // Process the queue if all users are selected for each upload
+            if (send) {
+                _this.processQueue();
+            }
         });
     }
 };
